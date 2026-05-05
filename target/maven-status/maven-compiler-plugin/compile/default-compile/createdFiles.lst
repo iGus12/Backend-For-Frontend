@@ -1,0 +1,10 @@
+cl\sanosysalvo\BFF\client\ReporteClient.class
+cl\sanosysalvo\BFF\config\RestTemplateConfig.class
+cl\sanosysalvo\BFF\dto\MascotaDTO.class
+cl\sanosysalvo\BFF\controller\BFFcontroller.class
+cl\sanosysalvo\BFF\service\BFFservice.class
+cl\sanosysalvo\BFF\client\ReporteClient$1.class
+cl\sanosysalvo\BFF\dto\MascotadetalleDTO.class
+cl\sanosysalvo\BFF\client\mascotaclient.class
+cl\sanosysalvo\BFF\BffApplication.class
+cl\sanosysalvo\BFF\dto\ReporteDTO.class

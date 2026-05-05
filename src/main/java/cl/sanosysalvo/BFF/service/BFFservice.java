@@ -7,6 +7,7 @@ import cl.sanosysalvo.BFF.dto.MascotadetalleDTO;
 import cl.sanosysalvo.BFF.dto.ReporteDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +23,13 @@ public class BFFservice {
 
     public MascotadetalleDTO obtenerDetalleMascota(Long id) {
         MascotaDTO mascota = mascotaClient.obtenerMascotaPorId(id);
-        List<ReporteDTO> reportes = reporteClient.obtenerReportesPorMascota(id);
+
+        List<ReporteDTO> reportes;
+        try {
+            reportes = reporteClient.obtenerReportesPorMascota(id);
+        } catch (Exception e) {
+            reportes = new ArrayList<>();
+        }
 
         MascotadetalleDTO detalle = new MascotadetalleDTO();
         detalle.setNombre(mascota.getNombre());
