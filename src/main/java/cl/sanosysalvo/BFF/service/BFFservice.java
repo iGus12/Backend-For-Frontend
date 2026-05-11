@@ -1,6 +1,6 @@
 package cl.sanosysalvo.BFF.service;
 
-import cl.sanosysalvo.BFF.client.mascotaclient;
+import cl.sanosysalvo.BFF.client.MascotaCliente;
 import cl.sanosysalvo.BFF.client.ReporteClient;
 import cl.sanosysalvo.BFF.dto.MascotaDTO;
 import cl.sanosysalvo.BFF.dto.MascotadetalleDTO;
@@ -13,16 +13,17 @@ import java.util.List;
 @Service
 public class BFFservice {
 
-    private final mascotaclient mascotaClient;
+    private final MascotaCliente mascotaClient;
     private final ReporteClient reporteClient;
 
-    public BFFservice(mascotaclient mascotaClient, ReporteClient reporteClient) {
+    public BFFservice(MascotaCliente mascotaClient, ReporteClient reporteClient) {
         this.mascotaClient = mascotaClient;
         this.reporteClient = reporteClient;
     }
 
+    // El tuyo pro de agregación de datos
     public MascotadetalleDTO obtenerDetalleMascota(Long id) {
-        MascotaDTO mascota = mascotaClient.obtenerMascotaPorId(id);
+        MascotaDTO mascota = mascotaClient.obtenerMascotaPorId(id); 
 
         List<ReporteDTO> reportes;
         try {
@@ -41,5 +42,13 @@ public class BFFservice {
         detalle.setReportes(reportes);
 
         return detalle;
+    }
+
+    public List<MascotaDTO> obtenerMascotas() {
+        return mascotaClient.listarTodas();
+    }
+
+    public MascotaDTO crearReporte(MascotaDTO mascota, String tipo) {
+        return mascotaClient.enviarReporte(mascota, tipo);
     }
 }
