@@ -23,7 +23,7 @@ public class ReporteClient {
     }
 
     public List<ReporteDTO> obtenerReportesPorMascota(Long idMascota) {
-        String url = "http://localhost:8082/api/reportes/mascota/" + idMascota;
+        String url = "http://localhost:8081/api/reportes/mascota/" + idMascota;
 
         return (List<ReporteDTO>) circuitBreakerFactory
                 .create("reportesService")

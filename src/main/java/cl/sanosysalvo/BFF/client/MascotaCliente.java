@@ -11,7 +11,7 @@ public class MascotaCliente {
 
     private final RestTemplate restTemplate;
     
-    private final String URL_BASE = "http://localhost:8082/api/mascotas"; 
+    private final String URL_BASE = "http://localhost:8081/api/mascotas"; 
 
     public MascotaCliente(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
