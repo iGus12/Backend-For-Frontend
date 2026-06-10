@@ -8,6 +8,8 @@ public class MascotaDTO {
     private Integer edad;
     private Long dueñoId;
     private String vacunas;
+    private String ubicacion;
+    private String estadoReporte;
 
     public MascotaDTO() {
     }
@@ -58,5 +60,21 @@ public class MascotaDTO {
 
     public void setVacunas(String vacunas) {
         this.vacunas = vacunas;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getEstadoReporte() {
+        return estadoReporte;
+    }
+
+    public void setEstadoReporte(String estadoReporte) {
+        this.estadoReporte = estadoReporte;
     }
 }
