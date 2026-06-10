@@ -87,7 +87,6 @@ public class BFFcontroller {
         }
     }
 
-    // 📝 TUNEL PUT ADMINISTRATIVO
     @PutMapping("/mascotas/actualizar/{id}")
     public ResponseEntity<?> actualizarMascotaAdmin(@PathVariable Long id, @RequestBody Map<String, Object> datos) {
         try {
@@ -99,7 +98,7 @@ public class BFFcontroller {
         }
     }
 
-    // 🗑️ TUNEL DELETE ADMINISTRATIVO
+   
     @DeleteMapping("/mascotas/eliminar/{id}")
     public ResponseEntity<?> eliminarMascotaAdmin(@PathVariable Long id) {
         try {
@@ -110,13 +109,13 @@ public class BFFcontroller {
         }
     }
 
-    // 🚀 CREACIÓN DIRECTA CORTE ADMIN (Bypass con CORS reforzado al máximo)
+    
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/mascotas/crear-admin")
     public ResponseEntity<?> crearMascotaAdmin(@RequestBody Map<String, Object> datos) {
         try {
             System.out.println("📩 [BFF] Procesando insercion directa de mascota admin: " + datos);
-            // 🔥 CORREGIDO: Ahora apunta a /crear-admin en el puerto 8081 para usar el SQL nativo
+            
             ResponseEntity<?> respuesta = restTemplate.postForEntity("http://localhost:8081/api/mascotas/crear-admin", datos, Map.class);
             return ResponseEntity.ok(respuesta.getBody());
         } catch (Exception e) {
