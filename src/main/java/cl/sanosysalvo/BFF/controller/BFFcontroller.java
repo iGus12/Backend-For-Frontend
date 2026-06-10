@@ -40,8 +40,7 @@ public class BFFcontroller {
         return ResponseEntity.ok(bffService.obtenerDetalleMascota(id));
     }
 
-    
-   @GetMapping("/dashboard/resumen")
+    @GetMapping("/dashboard/resumen")
     public ResponseEntity<Map<String, Object>> getDashboardSummary() {
         Map<String, Object> resumen = new HashMap<>();
         String msMascotasUrl = "http://localhost:8081/api/mascotas/count"; 
@@ -51,7 +50,6 @@ public class BFFcontroller {
         Long encontradas = 0L;
         Long pendientes = 0L;
 
-        // 🚀 Consultas individuales protegidas: si una se retrasa, las demás cargan igual
         try { 
             reportadas = restTemplate.getForObject(msMascotasUrl, Long.class); 
         } catch (Exception e) { System.out.println("Error total: " + e.getMessage()); }
@@ -78,14 +76,52 @@ public class BFFcontroller {
 
         return ResponseEntity.ok(resumen);
     }
+
     @GetMapping("/mascotas/ultimos")
     public ResponseEntity<?> getUltimosReportes() {
         try {
-            // Bypass directo al endpoint de Ms_Mascotas para traer todas las columnas reales (ubicacion, estado_reporte)
             List<?> rawMascotas = restTemplate.getForObject("http://localhost:8081/api/mascotas/listar", List.class);
             return ResponseEntity.ok(rawMascotas);
         } catch (Exception e) {
             return ResponseEntity.ok(List.of()); 
+        }
+    }
+
+    // 📝 TUNEL PUT ADMINISTRATIVO
+    @PutMapping("/mascotas/actualizar/{id}")
+    public ResponseEntity<?> actualizarMascotaAdmin(@PathVariable Long id, @RequestBody Map<String, Object> datos) {
+        try {
+            org.springframework.http.HttpEntity<Map<String, Object>> requestEntity = new org.springframework.http.HttpEntity<>(datos);
+            return restTemplate.exchange("http://localhost:8081/api/mascotas/" + id, org.springframework.http.HttpMethod.PUT, requestEntity, Void.class);
+        } catch (Exception e) {
+            System.out.println("❌ Error en túnel PUT del BFF: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF: " + e.getMessage());
+        }
+    }
+
+    // 🗑️ TUNEL DELETE ADMINISTRATIVO
+    @DeleteMapping("/mascotas/eliminar/{id}")
+    public ResponseEntity<?> eliminarMascotaAdmin(@PathVariable Long id) {
+        try {
+            return restTemplate.exchange("http://localhost:8081/api/mascotas/" + id, org.springframework.http.HttpMethod.DELETE, null, Void.class);
+        } catch (Exception e) {
+            System.out.println("❌ Error en túnel DELETE del BFF: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF: " + e.getMessage());
+        }
+    }
+
+    // 🚀 CREACIÓN DIRECTA CORTE ADMIN (Bypass con CORS reforzado al máximo)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/mascotas/crear-admin")
+    public ResponseEntity<?> crearMascotaAdmin(@RequestBody Map<String, Object> datos) {
+        try {
+            System.out.println("📩 [BFF] Procesando insercion directa de mascota admin: " + datos);
+            // 🔥 CORREGIDO: Ahora apunta a /crear-admin en el puerto 8081 para usar el SQL nativo
+            ResponseEntity<?> respuesta = restTemplate.postForEntity("http://localhost:8081/api/mascotas/crear-admin", datos, Map.class);
+            return ResponseEntity.ok(respuesta.getBody());
+        } catch (Exception e) {
+            System.out.println("❌ Error en BFF al crear mascota admin: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF: " + e.getMessage());
         }
     }
 }
