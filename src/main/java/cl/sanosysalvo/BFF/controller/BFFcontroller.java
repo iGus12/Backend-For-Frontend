@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate; 
 
 import java.util.List;
-import java.util.Map;      
+import java.util.Map;       
 import java.util.HashMap;   
 
 @RestController
@@ -98,7 +98,6 @@ public class BFFcontroller {
         }
     }
 
-   
     @DeleteMapping("/mascotas/eliminar/{id}")
     public ResponseEntity<?> eliminarMascotaAdmin(@PathVariable Long id) {
         try {
@@ -109,7 +108,6 @@ public class BFFcontroller {
         }
     }
 
-    
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/mascotas/crear-admin")
     public ResponseEntity<?> crearMascotaAdmin(@RequestBody Map<String, Object> datos) {
@@ -121,6 +119,41 @@ public class BFFcontroller {
         } catch (Exception e) {
             System.out.println("❌ Error en BFF al crear mascota admin: " + e.getMessage());
             return ResponseEntity.status(500).body("Error en BFF: " + e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/geo/listar")
+    public ResponseEntity<?> listarUbicaciones() {
+        try {
+            List<?> ubicaciones = restTemplate.getForObject("http://localhost:8082/api/geo/listar", List.class);
+            return ResponseEntity.ok(ubicaciones);
+        } catch (Exception e) {
+            System.out.println("❌ Error pidiendo ubicaciones: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Geo: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/geo/mascota/{id}")
+    public ResponseEntity<?> ubicacionesPorMascota(@PathVariable Long id) {
+        try {
+            List<?> ubicaciones = restTemplate.getForObject("http://localhost:8082/api/geo/mascota/" + id, List.class);
+            return ResponseEntity.ok(ubicaciones);
+        } catch (Exception e) {
+            System.out.println("❌ Error pidiendo historial de mascota: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Geo: " + e.getMessage());
+        }
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/geo/registrar")
+    public ResponseEntity<?> registrarUbicacion(@RequestBody Map<String, Object> datosGeo) {
+        try {
+            ResponseEntity<?> respuesta = restTemplate.postForEntity("http://localhost:8082/api/geo/registrar", datosGeo, Map.class);
+            return ResponseEntity.ok(respuesta.getBody());
+        } catch (Exception e) {
+            System.out.println("❌ Error registrando ubicación: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Geo: " + e.getMessage());
         }
     }
 }
