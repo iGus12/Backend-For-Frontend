@@ -126,7 +126,7 @@ public class BFFcontroller {
     @GetMapping("/geo/listar")
     public ResponseEntity<?> listarUbicaciones() {
         try {
-            List<?> ubicaciones = restTemplate.getForObject("http://localhost:8082/api/geo/listar", List.class);
+            List<?> ubicaciones = restTemplate.getForObject("http://localhost:8084/api/geo/listar", List.class);
             return ResponseEntity.ok(ubicaciones);
         } catch (Exception e) {
             System.out.println("❌ Error pidiendo ubicaciones: " + e.getMessage());
@@ -137,7 +137,7 @@ public class BFFcontroller {
     @GetMapping("/geo/mascota/{id}")
     public ResponseEntity<?> ubicacionesPorMascota(@PathVariable Long id) {
         try {
-            List<?> ubicaciones = restTemplate.getForObject("http://localhost:8082/api/geo/mascota/" + id, List.class);
+            List<?> ubicaciones = restTemplate.getForObject("http://localhost:8084/api/geo/mascota/" + id, List.class);
             return ResponseEntity.ok(ubicaciones);
         } catch (Exception e) {
             System.out.println("❌ Error pidiendo historial de mascota: " + e.getMessage());
@@ -149,7 +149,7 @@ public class BFFcontroller {
     @PostMapping("/geo/registrar")
     public ResponseEntity<?> registrarUbicacion(@RequestBody Map<String, Object> datosGeo) {
         try {
-            ResponseEntity<?> respuesta = restTemplate.postForEntity("http://localhost:8082/api/geo/registrar", datosGeo, Map.class);
+            ResponseEntity<?> respuesta = restTemplate.postForEntity("http://localhost:8084/api/geo/registrar", datosGeo, Map.class);
             return ResponseEntity.ok(respuesta.getBody());
         } catch (Exception e) {
             System.out.println("❌ Error registrando ubicación: " + e.getMessage());
