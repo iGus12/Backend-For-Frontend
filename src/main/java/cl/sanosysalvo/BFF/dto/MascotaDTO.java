@@ -10,6 +10,7 @@ public class MascotaDTO {
     private String vacunas;
     private String ubicacion;
     private String estadoReporte;
+    private String foto;
 
     public MascotaDTO() {
     }
@@ -20,7 +21,7 @@ public class MascotaDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
+    }   
 
     public String getEspecie() {
         return especie;
@@ -76,5 +77,12 @@ public class MascotaDTO {
 
     public void setEstadoReporte(String estadoReporte) {
         this.estadoReporte = estadoReporte;
+    }
+    public String getFoto() {
+    return foto;
+    }
+
+    public void setFoto(String foto) {
+    this.foto = foto;
     }
 }

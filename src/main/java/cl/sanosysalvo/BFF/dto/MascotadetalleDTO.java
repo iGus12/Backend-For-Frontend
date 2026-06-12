@@ -12,6 +12,7 @@ public class MascotadetalleDTO {
     private Long dueñoId;
     private String vacunas;
     private List<ReporteDTO> reportes;
+    private String foto;
 
     public MascotadetalleDTO() {
     }
@@ -70,5 +71,13 @@ public class MascotadetalleDTO {
 
     public void setReportes(List<ReporteDTO> reportes) {
         this.reportes = reportes;
+    }
+
+    public String getFoto() {
+    return foto;
+    }
+
+    public void setFoto(String foto) {
+    this.foto = foto;
     }
 }
