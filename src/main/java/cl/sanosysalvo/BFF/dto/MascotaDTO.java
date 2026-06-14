@@ -11,6 +11,7 @@ public class MascotaDTO {
     private String ubicacion;
     private String estadoReporte;
     private String foto;
+    private long id;
 
     public MascotaDTO() {
     }
@@ -84,5 +85,12 @@ public class MascotaDTO {
 
     public void setFoto(String foto) {
     this.foto = foto;
+    }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
