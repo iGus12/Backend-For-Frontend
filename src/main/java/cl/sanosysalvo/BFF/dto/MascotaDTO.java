@@ -1,7 +1,11 @@
 package cl.sanosysalvo.BFF.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MascotaDTO {
 
+    private Long id;
     private String nombre;
     private String especie;
     private String raza;
@@ -11,9 +15,16 @@ public class MascotaDTO {
     private String ubicacion;
     private String estadoReporte;
     private String foto;
-    private long id;
 
     public MascotaDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -22,7 +33,7 @@ public class MascotaDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }   
+    }
 
     public String getEspecie() {
         return especie;
@@ -79,18 +90,12 @@ public class MascotaDTO {
     public void setEstadoReporte(String estadoReporte) {
         this.estadoReporte = estadoReporte;
     }
+
     public String getFoto() {
-    return foto;
+        return foto;
     }
 
     public void setFoto(String foto) {
-    this.foto = foto;
-    }
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.foto = foto;
     }
 }
