@@ -21,7 +21,6 @@ public class BFFservice {
         this.reporteClient = reporteClient;
     }
 
-    // El tuyo pro de agregación de datos
     public MascotadetalleDTO obtenerDetalleMascota(Long id) {
         MascotaDTO mascota = mascotaClient.obtenerMascotaPorId(id); 
 
