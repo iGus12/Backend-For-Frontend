@@ -185,6 +185,66 @@ public class BFFcontroller {
         }
     }
 
+    @GetMapping("/adopcion/catalogo")
+    public ResponseEntity<?> obtenerCatalogoAdopcion() {
+        try {
+            List<?> catalogo = restTemplate.getForObject(
+                    "http://localhost:8086/api/adopcion/catalogo",
+                    List.class
+            );
+
+            return ResponseEntity.ok(catalogo);
+        } catch (Exception e) {
+            System.out.println("❌ Error pidiendo catálogo de adopción: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Adopción: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/adopcion/catalogo/detalle/{id}")
+    public ResponseEntity<?> obtenerDetalleAdopcion(@PathVariable Long id) {
+        try {
+            Object detalle = restTemplate.getForObject(
+                    "http://localhost:8086/api/adopcion/catalogo/" + id,
+                    Object.class
+            );
+
+            return ResponseEntity.ok(detalle);
+        } catch (Exception e) {
+            System.out.println("❌ Error pidiendo detalle de adopción: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Adopción: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/adopcion/catalogo/especie/{especie}")
+    public ResponseEntity<?> obtenerCatalogoAdopcionPorEspecie(@PathVariable String especie) {
+        try {
+            List<?> catalogo = restTemplate.getForObject(
+                    "http://localhost:8086/api/adopcion/catalogo/especie/" + especie,
+                    List.class
+            );
+
+            return ResponseEntity.ok(catalogo);
+        } catch (Exception e) {
+            System.out.println("❌ Error filtrando adopción por especie: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Adopción: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/adopcion/catalogo/ubicacion/{ubicacion}")
+    public ResponseEntity<?> obtenerCatalogoAdopcionPorUbicacion(@PathVariable String ubicacion) {
+        try {
+            List<?> catalogo = restTemplate.getForObject(
+                    "http://localhost:8086/api/adopcion/catalogo/ubicacion/" + ubicacion,
+                    List.class
+            );
+
+            return ResponseEntity.ok(catalogo);
+        } catch (Exception e) {
+            System.out.println("❌ Error filtrando adopción por ubicación: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error en BFF Adopción: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/geo/listar")
     public ResponseEntity<?> listarUbicaciones() {
         try {
