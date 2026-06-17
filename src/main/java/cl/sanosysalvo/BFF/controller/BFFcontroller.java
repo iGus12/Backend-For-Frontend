@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import cl.sanosysalvo.BFF.util.JWTservice;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,17 +24,70 @@ public class BFFcontroller {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private JWTservice jwtService;
+
     @GetMapping("/mascotas/listar")
     public ResponseEntity<List<MascotaDTO>> listarMascotas() {
         return ResponseEntity.ok(bffService.obtenerMascotas());
     }
 
-    @PostMapping("/mascotas/reportar")
-    public ResponseEntity<MascotaDTO> reportar(
-            @RequestBody MascotaDTO mascota,
-            @RequestParam(required = false) String tipo) {
-        return ResponseEntity.ok(bffService.crearReporte(mascota, tipo));
+    @GetMapping("/mascotas/mis-mascotas")
+    public ResponseEntity<?> obtenerMisMascotas(
+        @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+
+        try {
+            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token no enviado o inválido");
+        }
+
+        String token = authorizationHeader.replace("Bearer ", "");
+
+        Long usuarioId = jwtService.extractUsuarioId(token);
+
+        System.out.println("📌 [BFF] Cargando mascotas del usuario ID: " + usuarioId);
+
+        List<?> mascotas = restTemplate.getForObject(
+                "http://localhost:8081/api/mascotas/usuario/" + usuarioId,
+                List.class
+        );
+
+        return ResponseEntity.ok(mascotas != null ? mascotas : List.of());
+
+    } catch (Exception e) {
+        System.out.println("❌ Error obteniendo mis mascotas: " + e.getMessage());
+        return ResponseEntity.status(500).body("Error en BFF al obtener mis mascotas: " + e.getMessage());
     }
+}
+
+    @PostMapping("/mascotas/reportar")
+    public ResponseEntity<?> reportar(
+        @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+        @RequestBody MascotaDTO mascota,
+        @RequestParam(required = false) String tipo) {
+
+        try {
+            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token no enviado o inválido");
+        }
+
+        String token = authorizationHeader.replace("Bearer ", "");
+
+        Long usuarioId = jwtService.extractUsuarioId(token);
+
+        System.out.println("📌 [BFF] Registrando mascota para usuario ID: " + usuarioId);
+
+        mascota.setDueñoId(usuarioId);
+
+        MascotaDTO mascotaCreada = bffService.crearReporte(mascota, tipo);
+
+        return ResponseEntity.ok(mascotaCreada);
+
+    } catch (Exception e) {
+        System.out.println("❌ Error reportando mascota con JWT: " + e.getMessage());
+        return ResponseEntity.status(500).body("Error en BFF al reportar mascota: " + e.getMessage());
+    }
+}
 
     @GetMapping("/mascotas/detalle/{id}")
     public ResponseEntity<MascotadetalleDTO> obtenerDetalleMascota(@PathVariable Long id) {
